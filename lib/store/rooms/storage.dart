@@ -3,7 +3,40 @@ import 'dart:convert';
 import 'package:sembast/sembast.dart';
 import 'package:syphon/global/print.dart';
 import 'package:syphon/storage/constants.dart';
+import 'package:syphon/storage/moor/database.dart';
 import 'package:syphon/store/rooms/room/model.dart';
+
+///
+/// Room Queries
+///
+extension RoomQueries on StorageDatabase {
+  Future<void> insertRooms(List<Room> rooms) {
+    return batch(
+      (batch) => batch.insertAllOnConflictUpdate(this.rooms, rooms),
+    );
+  }
+
+  Future<Room> selectRoom(String roomId) {
+    return (select(rooms)
+          ..where((tbl) => tbl.id.equals(roomId))
+          ..limit(1))
+        .getSingle();
+  }
+
+  Future<List<Room>> selectRooms(List<String> ids, {int offset = 0, int limit = 25}) {
+    return (select(rooms)
+          ..where((tbl) => tbl.id.isIn(ids))
+          ..limit(25, offset: offset))
+        .get();
+  }
+
+  // Future<List<Room>> searchRooms(String text, {int offset = 0, int limit = 25}) {
+  //   return (select(rooms)
+  //         ..where((tbl) => tbl.topic.like('%$text%'))
+  //         ..limit(25, offset: offset))
+  //       .get();
+  // }
+}
 
 Future saveRooms(
   Map<String, Room> rooms, {

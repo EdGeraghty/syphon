@@ -97,17 +97,11 @@ storageMiddleware(Database? storage, StorageDatabase? coldStorage) {
         break;
       case AddMessages:
         final _action = action as AddMessages;
-        saveMessages(_action.messages, storage: storage);
-        if (coldStorage == null) {
-          printWarning('MOOR STORAGE is null, skipping saving cold storage data!!!',
-              title: 'storageMiddleware');
-          break;
-        }
-        saveMessagesCold(_action.messages, storage: coldStorage);
+        saveMessages(_action.messages, storage: coldStorage!);
         break;
       case AddMessagesDecrypted:
         final _action = action as AddMessagesDecrypted;
-        saveDecrypted(_action.messages, storage: storage);
+        saveDecrypted(_action.messages, storage: coldStorage!);
         break;
       case SetThemeType:
       case SetPrimaryColor:

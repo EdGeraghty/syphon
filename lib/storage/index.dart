@@ -40,6 +40,7 @@ class Storage {
 
   // cold storage references
   static Database? instance;
+  static StorageDatabase? database;
 }
 
 Future<Database?> initStorage({String? context = AppContext.DEFAULT}) async {
@@ -138,8 +139,10 @@ deleteStorage({String? context = AppContext.DEFAULT}) async {
   }
 }
 
-Future<StorageDatabase> initColdStorage({String? context = AppContext.DEFAULT}) {
-  return Future.value(StorageDatabase(context!)); // never null ^
+Future<StorageDatabase> initColdStorage({String? context = AppContext.DEFAULT}) async {
+  final StorageDatabase database = await Future.value(StorageDatabase(context!)); // never null ^
+  Storage.database = database;
+  return database;
 }
 
 Future closeColdStorage(StorageDatabase? storage) async {
@@ -176,7 +179,7 @@ Future deleteColdStorage({String? context = AppContext.DEFAULT}) async {
 /// involved in stored messages/events
 ///
 /// TODO: need pagination for pretty much all of these
-Future<Map<String, dynamic>> loadStorage(Database storage) async {
+Future<Map<String, dynamic>> loadStorage(Database storage, StorageDatabase coldStorage) async {
   try {
     final auth = await loadAuth(storage: storage);
     final rooms = await loadRooms(storage: storage);
@@ -194,12 +197,12 @@ Future<Map<String, dynamic>> loadStorage(Database storage) async {
     for (final Room room in rooms.values) {
       messages[room.id] = await loadMessages(
         room.messageIds,
-        storage: storage,
+        storage: coldStorage,
       );
 
       decrypted[room.id] = await loadDecrypted(
         room.messageIds,
-        storage: storage,
+        storage: coldStorage,
       );
 
       reactions.addAll(await loadReactions(
