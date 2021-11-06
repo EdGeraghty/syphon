@@ -4,3 +4,6 @@
 [submodule "windows/olm"]
 	path = windows/olm
 	url = https://gitlab.matrix.org/matrix-org/olm.git
+[submodule "windows/sqlite"]
+	path = windows/sqlite
+	url = https://github.com/sqlite/sqlite.git
