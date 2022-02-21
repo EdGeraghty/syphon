@@ -53,6 +53,10 @@ class Values {
   static const defaultHeaders = {'Content-Type': 'application/json'};
   static const defaultUserId = 'onasind'; // only for hashing default on colored avatars
 
+  static const SESSION_EXPORT_HEADER = '-----BEGIN MEGOLM SESSION DATA-----';
+  static const SESSION_EXPORT_FOOTER = '-----END MEGOLM SESSION DATA-----';
+
+  static const ANDROID_DEFAULT_DIRECTORY = '/storage/emulated/0/Documents';
 }
 
 // ignore: non_constant_identifier_names
@@ -71,6 +75,8 @@ class SupportedLanguages {
     'fr',
     'hi',
     'hu',
+    'id',
+    'it',
     'ja',
     'nl',
     'pl',
@@ -78,6 +84,7 @@ class SupportedLanguages {
     'ru',
     'si',
     'sk',
+    'tr',
   ];
 
   static const rtl = [
