@@ -48,7 +48,7 @@ class SettingsStore extends Equatable {
   final String? pusherToken; // NOTE: can be device token for APNS
 
   const SettingsStore({
-    this.language = '',
+    this.language = 'en',
     this.syncInterval = 2000, // millis
     this.syncPollTimeout = 10000, // millis
     this.chatLists = const [],
